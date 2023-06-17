@@ -7,7 +7,6 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 	primeraCargar <- Falso
 	
 	Escribir "Bienvenido al APP"
-	
 	Repetir
 		opcionMenu <- menu()
 		categoria <- categoriaMenu()
@@ -25,7 +24,7 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 					1:
 						Dimension alimentosRestaurant[cantidadProducto]
 						Dimension preciosRestaurant[cantidadProducto]
-						cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
+						cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
 					2:
 						Dimension alimentosHeladeria[cantidadProducto]
 						Dimension preciosHeladeria[cantidadProducto]
@@ -34,8 +33,7 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 						Dimension alimentosCafeteria[cantidadProducto]
 						Dimension preciosCafeteria[cantidadProducto]
 						cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-				Fin Segun
-				
+				Fin Segun				
 			2:
 				
 			3:
@@ -48,16 +46,19 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 						Escribir "La opcion ingresada no es valida"
 					FinSi
 				Mientras Que  opcionOrdernar < 1 o opcionOrdernar > 2
-				
-				Si opcionOrdernar = 1 Entonces
-					ordenarArrayPrecios(precio,alimentos,n)
-				SiNo
-					Escribir ""
-				FinSi
+				Segun categoria Hacer
+					1:
+						ordenamiento(preciosRestaurant, alimentosRestaurant, cantidadProducto, opcionOrdernar)
+					2:
+						ordenamiento(preciosHeladeria, alimentosHeladeria, cantidadProducto, opcionOrdernar)
+					3: 
+						ordenamiento(preciosCafeteria, alimentosCafeteria, cantidadProducto, opcionOrdernar)
+				FinSegun
+				Escribir "Ordenamiento realizado con exito!"
 			4:			
 				Segun categoria Hacer
 					1:
-						listarDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
+						cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
 					2:
 						listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
 					3:
@@ -94,13 +95,23 @@ Funcion return <- categoriaMenu()
 	return <- opCategoria
 FinFuncion
 
-SubProceso  cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
-		Para i <- 0 Hasta cantidadProducto -1 Hacer
-			Escribir "Ingrese el nombre del producto ", i + 1
-			Leer alimentosRestaurant[i]
-			Escribir "Ingrese el precio ", i + 1 
-			Leer preciosRestaurant[i]
-		Fin Para
+SubProceso  cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+	Segun opcionMenu Hacer
+		1:
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Ingrese el nombre del producto ", i + 1
+				Leer alimentosRestaurant[i]
+				Escribir "Ingrese el precio ", i + 1 
+				Leer preciosRestaurant[i]
+			Fin Para
+		3:
+			
+		4:
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Producto", i + 1, alimentosRestaurant[i]
+				Escribir "Ingrese el precio ", i + 1, preciosRestaurant[i]
+			Fin Para
+	Fin Segun
 FinSubProceso
 
 SubProceso  cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
@@ -118,13 +129,6 @@ SubProceso  cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCaf
 		Leer alimentosCafeteria[i]
 		Escribir "Ingrese el precio ", i + 1 
 		Leer preciosCafeteria[i]
-	Fin Para
-FinSubProceso
-
-SubProceso  listarDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Producto", i + 1, alimentosRestaurant[i]
-		Escribir "Ingrese el precio ", i + 1, preciosRestaurant[i]
 	Fin Para
 FinSubProceso
 
@@ -191,3 +195,30 @@ SubProceso ordernarArregloPrecioDESC(precio,alimentos,n)
     FinPara
 FinSubProceso
 
+SubProceso ordenarArrayAlimentos(precio, alimentos, n)
+	Definir aux Como Caracter
+	Definir aux2 Como Real
+	Para i <- 0 Hasta n - 2 Hacer
+		Para j <- i + 1 Hasta n - 1 Hacer
+			Si alimentos[i] > alimentos[j] Entonces
+				aux <- alimentos[i]; 
+				aux2 <- precio[i]
+				alimentos[i] <- alimentos[j]; 
+				precio[i] <- precio[j]
+				alimentos[j] <- aux; 
+				precio[j] <- aux2
+			Fin Si
+		Fin Para
+	Fin Para
+FinSubProceso
+
+SubProceso ordenamiento(precio, alimentos, n, opcionOrdernar)
+	Si opcionOrdernar = 1 Entonces
+		ordenarArrayPrecios(precio,alimentos,n)
+	SiNo
+		ordenarArrayAlimentos(precio, alimentos, n)
+	FinSi
+FinSubProceso
+
+
+	
