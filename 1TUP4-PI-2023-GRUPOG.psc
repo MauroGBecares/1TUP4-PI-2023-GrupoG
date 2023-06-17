@@ -1,5 +1,5 @@
 Algoritmo TUP4_PI_2023_GRUPO_G 
-	Definir cantidadProducto, categoria Como Entero
+	Definir cantidadProducto, categoria, opcionMenu, opcionOrdernar Como Entero
 	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria  Como Caracter
 	Definir preciosRestaurant, preciosHeladeria, preciosCafeteria Como Real
 	Definir primeraCargar Como Logico
@@ -8,99 +8,186 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 	
 	Escribir "Bienvenido al APP"
 	
-	
 	Repetir
-		menu(opcionMenu)
-		
+		opcionMenu <- menu()
+		categoria <- categoriaMenu()
 		Segun opcionMenu Hacer
 			1:
-				Escribir "Ingrese categoria"
-				Escribir "1. Restaurant"
-				Escribir "2. Heladeria"
-				Escribir "3. Cafeteria"
-				Leer categoria
+				Repetir
+					Escribir "Ingrese la cantidad productos"
+					Leer cantidadProducto
+					Si cantidadProducto < 1 Entonces
+						Escribir "La cantidad no puede ser menor a uno"
+					Fin Si
+				Mientras que cantidadProducto < 1
 				
 				Segun categoria Hacer
 					1:
-						Leer cantidadProducto
 						Dimension alimentosRestaurant[cantidadProducto]
 						Dimension preciosRestaurant[cantidadProducto]
-						Para i <- 0 Hasta cantidadProducto -1 Hacer
-							Escribir "Ingrese el nombre del producto ", i + 1
-							Leer alimentosRestaurant[i]
-							Escribir "Ingrese el precio ", i + 1 
-							Leer preciosRestaurant[i]
-						Fin Para
-						
+						cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
 					2:
-						Leer cantidadProducto
 						Dimension alimentosHeladeria[cantidadProducto]
 						Dimension preciosHeladeria[cantidadProducto]
-						Para i <- 0 Hasta cantidadProducto -1 Hacer
-							Escribir "Ingrese el nombre del producto ", i + 1
-							Leer alimentosHeladeria[i]
-							Escribir "Ingrese el precio ", i + 1 
-							Leer preciosHeladeria[i]
-						Fin Para
+						cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
 					3:
-						Leer cantidadProducto
 						Dimension alimentosCafeteria[cantidadProducto]
 						Dimension preciosCafeteria[cantidadProducto]
-						Para i <- 0 Hasta cantidadProducto -1 Hacer
-							Escribir "Ingrese el nombre del producto ", i + 1
-							Leer alimentosCafeteria[i]
-							Escribir "Ingrese el precio ", i + 1 
-							Leer preciosCafeteria[i]
-						Fin Para
+						cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
 				Fin Segun
-				
 				
 			2:
 				
 			3:
+				Repetir
+					Escribir "¿Como desea ordenar?"
+					Escribir "1- Precio?"
+					Escribir "2- Alfabeticamente"
+					Leer  opcionOrdernar
+					Si opcionOrdernar < 1 o opcionOrdernar > 2 Entonces
+						Escribir "La opcion ingresada no es valida"
+					FinSi
+				Mientras Que  opcionOrdernar < 1 o opcionOrdernar > 2
 				
-			4:
-				Escribir "Seleccione la categoria de deseea listar"
-				
-				Escribir "Ingrese categoria"
-				Escribir "1. Restaurant"
-				Escribir "2. Heladeria"
-				Escribir "3. Cafeteria"
-				Leer categoria
-				
-				
+				Si opcionOrdernar = 1 Entonces
+					ordenarArrayPrecios(precio,alimentos,n)
+				SiNo
+					Escribir ""
+				FinSi
+			4:			
 				Segun categoria Hacer
 					1:
-						Para i <- 0 Hasta cantidadProducto -1 Hacer
-							Escribir "Producto", i + 1, alimentosRestaurant[i]
-							Escribir "Ingrese el precio ", i + 1, preciosRestaurant[i]
-						Fin Para
-						
+						listarDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
 					2:
-						Para i <- 0 Hasta cantidadProducto -1 Hacer
-							Escribir "Producto", i + 1, alimentosHeladeria[i]
-							Escribir "Ingrese el precio ", i + 1, preciosHeladeria[i]
-						Fin Para
+						listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
 					3:
-						Para i <- 0 Hasta cantidadProducto -1 Hacer
-							Escribir "Producto", i + 1, alimentosCafeteria[i]
-							Escribir "Ingrese el precio ", i + 1, preciosCafeteria[i]
-						Fin Para
+						listarDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
 				Fin Segun
 		Fin Segun
 		
 	Hasta Que opMenu==5
-
+	Escribir "Muchas gracias por utilizar nuestra app"
 FinAlgoritmo
 
-
-SubProceso menu(opMenu Por Referencia)
+Funcion return<-menu()
+	Definir opMenu Como Entero;
 	Repetir
 		Escribir "1. Carga de datos"
 		Escribir "2. Búsqueda"
 		Escribir "3. Ordenamiento"
 		Escribir "4. Listado/s"
 		Escribir "5. SALIR";
-		Leer opMenu
+		Leer opMenu;
 	Mientras Que opMenu < 1 o opMenu > 5
+	return <- opMenu;
+FinFuncion
+
+Funcion return <- categoriaMenu()
+	Definir opCategoria Como Entero
+	Repetir
+		Escribir "Ingrese categoria"
+		Escribir "1. Restaurant"
+		Escribir "2. Heladeria"
+		Escribir "3. Cafeteria"
+		Leer opCategoria
+	Mientras Que opCategoria < 1 o opCategoria > 3
+	return <- opCategoria
+FinFuncion
+
+SubProceso  cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
+		Para i <- 0 Hasta cantidadProducto -1 Hacer
+			Escribir "Ingrese el nombre del producto ", i + 1
+			Leer alimentosRestaurant[i]
+			Escribir "Ingrese el precio ", i + 1 
+			Leer preciosRestaurant[i]
+		Fin Para
 FinSubProceso
+
+SubProceso  cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
+	Para i <- 0 Hasta cantidadProducto -1 Hacer
+		Escribir "Ingrese el nombre del producto ", i + 1
+		Leer alimentosHeladeria[i]
+		Escribir "Ingrese el precio ", i + 1 
+		Leer preciosHeladeria[i]
+	Fin Para
+FinSubProceso
+
+SubProceso  cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
+	Para i <- 0 Hasta cantidadProducto -1 Hacer
+		Escribir "Ingrese el nombre del producto ", i + 1
+		Leer alimentosCafeteria[i]
+		Escribir "Ingrese el precio ", i + 1 
+		Leer preciosCafeteria[i]
+	Fin Para
+FinSubProceso
+
+SubProceso  listarDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
+	Para i <- 0 Hasta cantidadProducto -1 Hacer
+		Escribir "Producto", i + 1, alimentosRestaurant[i]
+		Escribir "Ingrese el precio ", i + 1, preciosRestaurant[i]
+	Fin Para
+FinSubProceso
+
+SubProceso  listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
+	Para i <- 0 Hasta cantidadProducto -1 Hacer
+		Escribir "Producto", i + 1, alimentosHeladeria[i]
+		Escribir "Ingrese el precio ", i + 1, preciosHeladeria[i]
+	Fin Para
+FinSubProceso
+
+SubProceso  listarDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
+	Para i <- 0 Hasta cantidadProducto -1 Hacer
+		Escribir "Producto", i + 1, alimentosCafeteria[i]
+		Escribir "Ingrese el precio ", i + 1, preciosCafeteria[i]
+	Fin Para
+FinSubProceso
+
+SubProceso ordenarArrayPrecios(precio,alimentos,n)
+    Definir orderBy Como Caracter;
+    Repetir
+        Escribir "Ingrese ASC si quiere ordenarlo ascendentemente o DESC si quiere ordenarlo descendentemente";
+        Leer orderBy;
+        orderBy <- Mayusculas(orderBy);
+    Mientras Que orderBy<>"ASC" y orderBy<>"DESC"
+	
+    si orderBy="ASC" Entonces
+        ordernarArregloPrecioASC(precio,alimentos,n)
+    SiNo
+        ordernarArregloPrecioDESC(precio,alimentos,n)
+    FinSi
+FinSubProceso
+
+SubProceso ordernarArregloPrecioASC(precio,alimentos,n)
+    Definir aux Como Entero;
+    Definir aux2 Como Caracter
+    para i<-0 hasta n-2 Hacer 
+        para j<-i+1 hasta n-1 Hacer 
+            si precio[i]>precio[j] Entonces
+                aux <- precio[i]; 
+                aux2 <- alimentos[i]
+                precio[i] <- precio[j]; 
+				alimentos[i] <- alimentos[j]
+                precio[j] <- aux; 
+                alimentos[j] <- aux2
+            FinSi
+        FinPara
+    FinPara
+FinSubProceso
+
+SubProceso ordernarArregloPrecioDESC(precio,alimentos,n)
+    Definir aux Como Entero;
+	Definir aux2 Como Caracter
+    para i<-0 hasta n-2 Hacer
+        para j<-i+1 hasta n-1 Hacer
+            si precio[i]<precio[j] Entonces
+                aux <- precio[i]; 
+                aux2 <- alimentos[i]
+                precio[i] <- precio[j]; 
+				alimentos[i] <- alimentos[j]
+                precio[j] <- aux; 
+                alimentos[j] <- aux2
+            FinSi
+        FinPara
+    FinPara
+FinSubProceso
+
