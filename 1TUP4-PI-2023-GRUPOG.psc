@@ -112,7 +112,7 @@ FinFuncion
 
 // DATOS RESTAURANT //
 
-SubProceso  cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+SubProceso DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
 	Segun opcionMenu Hacer
 		"CARGA DE DATOS":
 			Para i <- 0 Hasta cantidadProducto -1 Hacer
@@ -135,7 +135,7 @@ FinSubProceso
 
 // DATOS HELADERIA  //
 
-SubProceso  DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+SubProceso DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
 	Segun opcionMenu Hacer
 		"CARGA DE DATOS":
 			Para i <- 0 Hasta cantidadProducto -1 Hacer
@@ -158,7 +158,7 @@ FinSubProceso
 
 // DATOS CAFETERIA  //
 
-SubProceso  DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+SubProceso DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 	Segun opcionMenu Hacer
 		"CARGA DE DATOS":
 			Para i <- 0 Hasta cantidadProducto -1 Hacer
