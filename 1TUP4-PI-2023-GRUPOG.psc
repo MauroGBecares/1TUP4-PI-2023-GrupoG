@@ -1,85 +1,100 @@
 Algoritmo TUP4_PI_2023_GRUPO_G 
-	Definir cantidadProducto, categoria, opcionMenu, opcionOrdernar Como Entero
-	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria  Como Caracter
+	Definir cantidadProducto, categoria, opcionOrdernar Como Entero
+	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria, busquedaProducto, opcionMenu Como Caracter
 	Definir preciosRestaurant, preciosHeladeria, preciosCafeteria Como Real
-	Definir primeraCargar Como Logico
+	Definir primeraCargar, existeProducto Como Logico
 	cantidadProducto <- 0
 	primeraCargar <- Falso
 	
 	Escribir "Bienvenido al APP"
-	
 	Repetir
 		opcionMenu <- menu()
-		categoria <- categoriaMenu()
-		Segun opcionMenu Hacer
-			1:
-				Repetir
-					Escribir "Ingrese la cantidad productos"
-					Leer cantidadProducto
-					Si cantidadProducto < 1 Entonces
-						Escribir "La cantidad no puede ser menor a uno"
-					Fin Si
-				Mientras que cantidadProducto < 1
-				
-				Segun categoria Hacer
-					1:
-						Dimension alimentosRestaurant[cantidadProducto]
-						Dimension preciosRestaurant[cantidadProducto]
-						cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
-					2:
-						Dimension alimentosHeladeria[cantidadProducto]
-						Dimension preciosHeladeria[cantidadProducto]
-						cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-					3:
-						Dimension alimentosCafeteria[cantidadProducto]
-						Dimension preciosCafeteria[cantidadProducto]
-						cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-				Fin Segun
-				
-			2:
-				
-			3:
-				Repetir
-					Escribir "¿Como desea ordenar?"
-					Escribir "1- Precio?"
-					Escribir "2- Alfabeticamente"
-					Leer  opcionOrdernar
-					Si opcionOrdernar < 1 o opcionOrdernar > 2 Entonces
-						Escribir "La opcion ingresada no es valida"
-					FinSi
-				Mientras Que  opcionOrdernar < 1 o opcionOrdernar > 2
-				
-				Si opcionOrdernar = 1 Entonces
-					ordenarArrayPrecios(precio,alimentos,n)
-				SiNo
-					Escribir ""
-				FinSi
-			4:			
-				Segun categoria Hacer
-					1:
-						listarDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
-					2:
-						listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-					3:
-						listarDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-				Fin Segun
-		Fin Segun
-		
-	Hasta Que opMenu==5
+		Si opcionMenu <> "SALIR" 
+			categoria <- categoriaMenu()
+			Segun opcionMenu Hacer
+				"CARGA DE DATOS":
+					Repetir
+						Escribir "Ingrese la cantidad productos"
+						Leer cantidadProducto
+						Si cantidadProducto < 1 Entonces
+							Escribir "La cantidad no puede ser menor a uno"
+						Fin Si
+					Mientras que cantidadProducto < 1
+					
+					Segun categoria Hacer
+						1:
+							Dimension alimentosRestaurant[cantidadProducto]
+							Dimension preciosRestaurant[cantidadProducto]
+							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+						2:
+							Dimension alimentosHeladeria[cantidadProducto]
+							Dimension preciosHeladeria[cantidadProducto]
+							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+						3:
+							Dimension alimentosCafeteria[cantidadProducto]
+							Dimension preciosCafeteria[cantidadProducto]
+							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+					Fin Segun
+					
+				"BUSQUEDA":
+					Segun categoria Hacer
+						1:
+							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+						2:
+							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+						3:
+							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+					Fin Segun
+					
+				"ORDENAMIENTO":
+					Repetir
+						Escribir "¿Como desea ordenar?"
+						Escribir "1- Precio?"
+						Escribir "2- Alfabeticamente"
+						Leer  opcionOrdernar
+						Si opcionOrdernar < 1 o opcionOrdernar > 2 Entonces
+							Escribir "La opcion ingresada no es valida"
+						FinSi
+					Mientras Que  opcionOrdernar < 1 o opcionOrdernar > 2
+					Segun categoria Hacer
+						1:
+							ordenamiento(preciosRestaurant, alimentosRestaurant, cantidadProducto, opcionOrdernar)
+						2:
+							ordenamiento(preciosHeladeria, alimentosHeladeria, cantidadProducto, opcionOrdernar)
+						3: 
+							ordenamiento(preciosCafeteria, alimentosCafeteria, cantidadProducto, opcionOrdernar)
+					FinSegun
+					Escribir "Ordenamiento realizado con exito!"
+				"LISTADO/S":
+					Segun categoria Hacer
+						1:
+							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+						2:
+							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+						3:
+							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+					Fin Segun
+			Fin Segun
+		FinSi
+	Hasta Que opcionMenu == "SALIR"
 	Escribir "Muchas gracias por utilizar nuestra app"
+	
 FinAlgoritmo
 
 Funcion return<-menu()
-	Definir opMenu Como Entero;
+	Definir opMenu Como Cadena;
 	Repetir
+		Escribir "Ingrese el nombre de la opcion seleccionada"
 		Escribir "1. Carga de datos"
-		Escribir "2. Búsqueda"
+		Escribir "2. Busqueda"
 		Escribir "3. Ordenamiento"
 		Escribir "4. Listado/s"
-		Escribir "5. SALIR";
-		Leer opMenu;
-	Mientras Que opMenu < 1 o opMenu > 5
-	return <- opMenu;
+		Escribir "5. SALIR"
+		Leer opMenu
+		opMenu <- Mayusculas(opMenu)
+		Escribir opMenu
+	Hasta Que opMenu == "CARGA DE DATOS" o opMenu == "BUSQUEDA" o opMenu == "ORDENAMIENTO" o opMenu == "LISTADO/S" o opMenu == "SALIR"
+	return <- opMenu
 FinFuncion
 
 Funcion return <- categoriaMenu()
@@ -94,53 +109,120 @@ Funcion return <- categoriaMenu()
 	return <- opCategoria
 FinFuncion
 
-SubProceso  cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
-		Para i <- 0 Hasta cantidadProducto -1 Hacer
-			Escribir "Ingrese el nombre del producto ", i + 1
-			Leer alimentosRestaurant[i]
-			Escribir "Ingrese el precio ", i + 1 
-			Leer preciosRestaurant[i]
-		Fin Para
+
+// DATOS RESTAURANT //
+SubProceso  cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+	Segun opcionMenu Hacer
+		"CARGA DE DATOS":
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Ingrese el nombre del producto ", i + 1
+				Leer alimentosRestaurant[i]
+				alimentosRestaurant[i] <- Mayusculas(alimentosRestaurant[i])
+				Escribir "Ingrese el precio ", i + 1 
+				Leer preciosRestaurant[i]
+			Fin Para
+		"BUSQUEDA":
+			busquedaAlimento(alimentosRestaurant,preciosRestaurant,cantidadProducto)
+		"LISTADO/S":
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Producto", i + 1, alimentosRestaurant[i]
+				Escribir "Ingrese el precio ", i + 1, preciosRestaurant[i]
+			Fin Para
+	Fin Segun
 FinSubProceso
 
-SubProceso  cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Ingrese el nombre del producto ", i + 1
-		Leer alimentosHeladeria[i]
-		Escribir "Ingrese el precio ", i + 1 
-		Leer preciosHeladeria[i]
-	Fin Para
+
+// DATOS HELADERIA  //
+SubProceso  DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+	Segun opcionMenu Hacer
+		"CARGA DE DATOS":
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Ingrese el nombre del producto ", i + 1
+				Leer alimentosHeladeria[i]
+				alimentosHeladeria[i] <- Mayusculas(alimentosHeladeria[i])
+				Escribir "Ingrese el precio ", i + 1 
+				Leer preciosHeladeria[i]
+			Fin Para
+		"BUSQUEDA":
+			busquedaAlimento(alimentosHeladeria,preciosHeladeria,cantidadProducto)
+		"LISTADO/S":
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Producto", i + 1, alimentosHeladeria[i]
+				Escribir "Ingrese el precio ", i + 1, preciosHeladeria[i]
+			Fin Para
+	Fin Segun
 FinSubProceso
 
-SubProceso  cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Ingrese el nombre del producto ", i + 1
-		Leer alimentosCafeteria[i]
-		Escribir "Ingrese el precio ", i + 1 
-		Leer preciosCafeteria[i]
-	Fin Para
+
+// DATOS CAFETERIA  //
+SubProceso  DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+	Segun opcionMenu Hacer
+		"CARGA DE DATOS":
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Ingrese el nombre del producto ", i + 1
+				Leer alimentosCafeteria[i]
+				alimentosCafeteria[i] <- Mayusculas(alimentosCafeteria[i])
+				Escribir "Ingrese el precio ", i + 1 
+				Leer preciosCafeteria[i]
+			Fin Para
+		"BUSQUEDA":
+			busquedaAlimento(alimentosCafeteria,preciosCafeteria,cantidadProducto)
+		"LISTADO/S":
+			Para i <- 0 Hasta cantidadProducto -1 Hacer
+				Escribir "Producto", i + 1, alimentosCafeteria[i]
+				Escribir "Ingrese el precio ", i + 1, preciosCafeteria[i]
+			Fin Para
+	Fin Segun
 FinSubProceso
 
-SubProceso  listarDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Producto", i + 1, alimentosRestaurant[i]
-		Escribir "Ingrese el precio ", i + 1, preciosRestaurant[i]
-	Fin Para
+
+//SubProceso cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
+//	Para i <- 0 Hasta cantidadProducto -1 Hacer
+//		Escribir "Ingrese el nombre del producto ", i + 1
+//		Leer alimentosHeladeria[i]
+//		alimentosHeladeria[i] <- Mayusculas(alimentosHeladeria[i])
+//		Escribir "Ingrese el precio ", i + 1 
+//		Leer preciosHeladeria[i]
+//	Fin Para
+//FinSubProceso
+//
+//SubProceso cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
+//	Para i <- 0 Hasta cantidadProducto -1 Hacer
+//		Escribir "Ingrese el nombre del producto ", i + 1
+//		Leer alimentosCafeteria[i]
+//		alimentosCafeteria[i] <- Mayusculas(alimentosCafeteria[i])
+//		Escribir "Ingrese el precio ", i + 1 
+//		Leer preciosCafeteria[i]
+//	Fin Para
+//FinSubProceso
+//
+//SubProceso  listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
+//	Para i <- 0 Hasta cantidadProducto -1 Hacer
+//		Escribir "Producto", i + 1, alimentosHeladeria[i]
+//		Escribir "Ingrese el precio ", i + 1, preciosHeladeria[i]
+//	Fin Para
+//FinSubProceso
+//
+//SubProceso  listarDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
+//	Para i <- 0 Hasta cantidadProducto -1 Hacer
+//		Escribir "Producto", i + 1, alimentosCafeteria[i]
+//		Escribir "Ingrese el precio ", i + 1, preciosCafeteria[i]
+//	Fin Para
+//FinSubProceso
+
+
+// MENU DE ORDENAMIENTOS //
+
+SubProceso ordenamiento(precio, alimentos, n, opcionOrdernar)
+	Si opcionOrdernar = 1 Entonces
+		ordenarArrayPrecios(precio,alimentos,n)
+	SiNo
+		ordenarArrayAlimentos(precio, alimentos, n)
+	FinSi
 FinSubProceso
 
-SubProceso  listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Producto", i + 1, alimentosHeladeria[i]
-		Escribir "Ingrese el precio ", i + 1, preciosHeladeria[i]
-	Fin Para
-FinSubProceso
 
-SubProceso  listarDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Producto", i + 1, alimentosCafeteria[i]
-		Escribir "Ingrese el precio ", i + 1, preciosCafeteria[i]
-	Fin Para
-FinSubProceso
+// MENU DE ORDENAMIENTO PARA PRECIOS //
 
 SubProceso ordenarArrayPrecios(precio,alimentos,n)
     Definir orderBy Como Caracter;
@@ -157,6 +239,8 @@ SubProceso ordenarArrayPrecios(precio,alimentos,n)
     FinSi
 FinSubProceso
 
+
+// ORDENA DE MENOR A MAYOR
 SubProceso ordernarArregloPrecioASC(precio,alimentos,n)
     Definir aux Como Entero;
     Definir aux2 Como Caracter
@@ -174,6 +258,9 @@ SubProceso ordernarArregloPrecioASC(precio,alimentos,n)
     FinPara
 FinSubProceso
 
+
+// ORDENA DE MAYOR A MENOR  //
+
 SubProceso ordernarArregloPrecioDESC(precio,alimentos,n)
     Definir aux Como Entero;
 	Definir aux2 Como Caracter
@@ -189,5 +276,49 @@ SubProceso ordernarArregloPrecioDESC(precio,alimentos,n)
             FinSi
         FinPara
     FinPara
+FinSubProceso
+
+
+// ORDENAR ALFABETICAMENTE A-Z  //
+
+SubProceso ordenarArrayAlimentos(precio, alimentos, n)
+	Definir aux Como Caracter
+	Definir aux2 Como Real
+	Para i <- 0 Hasta n - 2 Hacer
+		Para j <- i + 1 Hasta n - 1 Hacer
+			Si alimentos[i] > alimentos[j] Entonces
+				aux <- alimentos[i]; 
+				aux2 <- precio[i]
+				alimentos[i] <- alimentos[j]; 
+				precio[i] <- precio[j]
+				alimentos[j] <- aux; 
+				precio[j] <- aux2
+			Fin Si
+		Fin Para
+	Fin Para
+FinSubProceso
+
+
+// BUSQUEDA //
+
+SubProceso busquedaAlimento(alimentos,precios,cantidadProducto)
+	Definir  alimentoBuscado Como Cadena
+	Definir i Como Entero;
+	i<-0;
+	Escribir "Ingrese el alimento que quiere buscar"
+	Leer alimentoBuscado
+	alimentoBuscado <- Mayusculas(alimentoBuscado)
+	elementoEncontrado <- Falso;
+	Mientras i <= cantidadProducto-1 y no elementoEncontrado
+		Si alimentoBuscado == alimentos[i]
+			Escribir alimentos[i], " ", precios[i], "."
+			elementoEncontrado <- Verdadero; 
+		FinSi
+		i <- i +1; 
+	FinMientras
+	
+	Si no elementoEncontrado Entonces
+		Escribir "No se encontro el alimento solicitado";
+	FinSi
 FinSubProceso
 
