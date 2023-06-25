@@ -3,7 +3,7 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria, busquedaProducto, opcionMenuComerciante, pedidosRealizados, usuario, contrasenia, opcionOrdernar como Caracter
 	Definir opcionMenuCliente, categoria Como Caracter
 	Definir preciosRestaurant, preciosHeladeria, preciosCafeteria Como Real
-	Definir existeProducto, finalizarPrograma, primeraCargaRestaurant, primeraCargaHeladeria, primeraCargaCafeteria Como Logico
+	Definir finalizarPrograma, primeraCargaRestaurant, primeraCargaHeladeria, primeraCargaCafeteria Como Logico
 	Dimension pedidosRealizados[100,3]
 	// LAS COLUMNAS DEL NUEVO ARREGLO SON // NOMBRE Y APELLIDO // DIRECCION // MONTO CON EL QUE PAGA EL CLIENTE
 	finalizarPrograma <- Falso
@@ -15,10 +15,12 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 	cantidadPedidos <- 0
 	
 	Escribir "Bienvenido al APP"
-	
+	// PARA INGRESAR COMO CLIENTE: Usuario <- cliente Contraseña <- 1111
+	// PARA INGRESAR COMO COMERCIANTE: Usuario <-comerciante Contraseña <- 5555
+	// CUPON DE DESCUENTO: CUPON. SUBPROCESO realizarPedido. Linea 430
 	Repetir
 		menuPrincipal(usuario, contrasenia, finalizarPrograma)
-		Si usuario == "cliente123" y contrasenia == "87987" Entonces
+		Si usuario == "cliente" y contrasenia == "1111" Entonces
 			Repetir
 				opcionMenuCliente <- menuCliente()
 				Si opcionMenuCliente <> "SALIR" Entonces
@@ -28,32 +30,36 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 							"RESTAURANT":
 								Si primeraCargaRestaurant Entonces
 									mostrarLista(alimentosRestaurant, preciosRestaurant, cantidadProducto)
-									realizarPedido(alimentosRestaurant, preciosRestaurant, cantidadProducto)
+									realizarPedido(alimentosRestaurant, preciosRestaurant, cantidadProducto, cantidadPedidos, pedidosRealizados)
 								Sino 
 									Escribir "No hay datos productos cargados"
 								FinSi
 							"HELADERIA":
 								Si primeraCargaHeladeria Entonces
 									mostrarLista(alimentosHeladeria, preciosHeladeria, cantidadProducto)
-									realizarPedido(alimentosHeladeria, preciosHeladeria, cantidadProducto)
+									realizarPedido(alimentosHeladeria, preciosHeladeria, cantidadProducto, cantidadPedidos, pedidosRealizados)
 								SiNo
 									Escribir "No hay datos productos cargados"
 								FinSi
 							"CAFETERIA":
 								Si primeraCargaCafeteria Entonces
 									mostrarLista(alimentosCafeteria, preciosCafeteria, cantidadProducto)
-									realizarPedido(alimentosCafeteria, preciosCafeteria, cantidadProducto)
+									realizarPedido(alimentosCafeteria, preciosCafeteria, cantidadProducto, cantidadPedidos, pedidosRealizados)
 								SiNo
 									Escribir "No hay datos productos cargados"
 								FinSi
 						Fin Segun
 					SiNo
-						mostrarListaPedidos(pedidosRealizados, cantidadPedidos)
+						Si cantidadPedidos == 0 Entonces
+							Escribir "No hay pedidos cargados"
+						SiNo
+							mostrarListaPedidos(pedidosRealizados, cantidadPedidos)
+						FinSi
 					FinSi
 				FinSi
 			Mientras Que opcionMenuCliente <> "SALIR"
 		SiNo
-			Si usuario == "comerciante546" y contrasenia == "64541" Entonces
+			Si usuario == "comerciante" y contrasenia == "5555" Entonces
 				Repetir
 					opcionMenuComerciante <- menuComerciante()
 					Si opcionMenuComerciante <> "SALIR" Entonces
@@ -75,7 +81,7 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 									"CAFETERIA":
 										Dimension alimentosCafeteria[cantidadProducto]
 										Dimension preciosCafeteria[cantidadProducto]
-										cargarProducto(alimentosCafeteria, preciosCafeteria, preciosCafeteria)
+										cargarProducto(alimentosCafeteria, preciosCafeteria, cantidadProducto)
 										primeraCargaCafeteria <- Verdadero
 								Fin Segun
 							"BUSQUEDA":
@@ -83,7 +89,7 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 									"RESTAURANT":
 										busquedaProductoComerciante(alimentosRestaurant, preciosRestaurant, cantidadProducto)
 									"HELADERIA":
-										busquedaProductoComerciante(alimentosHeladeria, preciosRestaurant, cantidadProducto)
+										busquedaProductoComerciante(alimentosHeladeria, preciosHeladeria, cantidadProducto)
 									"CAFETERIA":
 										busquedaProductoComerciante(alimentosCafeteria, preciosCafeteria, cantidadProducto)
 								Fin Segun
@@ -129,10 +135,10 @@ SubProceso menuPrincipal(usuario Por Referencia, contrasenia Por Referencia, sal
 			Leer usuario
 			Escribir "Ingrese su contraseña: "
 			Leer contrasenia
-			Si no((usuario == "cliente123" y contrasenia == "87987") o (usuario == "comerciante546" y contrasenia == "64541"))
+			Si no((usuario == "cliente" y contrasenia == "1111") o (usuario == "comerciante" y contrasenia == "5555"))
 				Escribir "Las credeciales ingresadas son incorrectas, intente nuevamente"
 			FinSi
-		Mientras Que no((usuario == "cliente123" y contrasenia == "87987") o (usuario == "comerciante546" y contrasenia == "64541"))
+		Mientras Que no((usuario == "cliente" y contrasenia == "1111") o (usuario == "comerciante" y contrasenia == "5555"))
 	SiNo
 		salida <- Verdadero
 	FinSi
@@ -209,7 +215,7 @@ SubProceso busquedaProductoComerciante(arrayAlimentos, arrayPrecios, cantidadPro
 	alimentoBuscado <- Mayusculas(alimentoBuscado)
 	indice <- buscarProducto(arrayAlimentos, arrayPrecios, cantidadProductos, alimentoBuscado)
 	Si indice < 0 Entonces
-		Escribir "No se encontro el alimento solicitado";
+		Escribir "No se encontro el alimento solicitado"
 	SiNo
 		Escribir arrayAlimentos[indice], " ", arrayPrecios[indice], "."
 	FinSi
@@ -248,11 +254,13 @@ FinSubProceso
 
 // MENU ORDENAMIENTO PRINCIPAL //
 Funcion return <- menuOrdenamiento()
+	Definir opcionOrdernar Como Caracter
 	Repetir
 		Escribir "¿Como desea ordenar?"
 		Escribir "- Precio"
 		Escribir "- Alfabeticamente"
 		Leer opcionOrdernar
+		opcionOrdernar <- Mayusculas(opcionOrdernar)
 		Si no(opcionOrdernar == "PRECIO" o opcionOrdernar == "ALFABETICAMENTE") Entonces
 			Escribir "La opcion ingresada no es valida"
 		FinSi
@@ -354,6 +362,7 @@ FinSubProceso
 // ------------------------------------------------------------------FIN COMERCIANTE--------------------------------------------------------------------------------------------------- //
 
 // ------------------------------------------------------------------CLIENTE----------------------------------------------------------------------------------------------------------- //
+// MENU CLIENTE
 Funcion return <- menuCliente()
 	Definir opMenu Como Cadena;
 	Repetir
@@ -371,7 +380,7 @@ Funcion return <- menuCliente()
 	Limpiar Pantalla
 FinFuncion
 
-
+// SUBPROCESO QUE REALIZA PEDIDO - CUPON DE DESCUENTO: CUPON//  
 SubProceso realizarPedido(arrayAlimentos, arrayPrecios, n, cantidadPedidos Por Referencia, pedidosRealizados)
 	Definir pedido, nombre, IngresaCuponDescuento, direccion, listaProductos, confirmacionPedido Como Caracter
 	Definir indice, cantidadPedido, i, cantidad, descuento Como Entero
@@ -379,7 +388,7 @@ SubProceso realizarPedido(arrayAlimentos, arrayPrecios, n, cantidadPedidos Por R
 	costoEnvio <- 300
 	costoServicio <- 100
 	descuento <- 0
-	Escribir "Ingrese la cantidad de productos que desea pedir: "
+	Escribir "Cuantos tipos de productos desea pedir: "
 	Leer cantidadPedido
 	Dimension listaProductos[cantidadPedido, 3]
 	i <- 0
@@ -399,7 +408,7 @@ SubProceso realizarPedido(arrayAlimentos, arrayPrecios, n, cantidadPedidos Por R
 		Mientras Que cantidad < 0
 		listaProductos[i, 0] <- pedido
 		listaProductos[i, 1] <- ConvertirATexto(cantidad)
-		listaProductos[i, 2] <- ConvertirATexto(arrayPrecios[indice])
+		listaProductos[i, 2] <- ConvertirATexto(cantidad * arrayPrecios[indice])
 		subTotal <- subTotal + (arrayPrecios[indice] * cantidad)
 		i <- i + 1
 	Mientras Que i < cantidadPedido
@@ -413,19 +422,20 @@ SubProceso realizarPedido(arrayAlimentos, arrayPrecios, n, cantidadPedidos Por R
 	Repetir
 		Escribir "Posee cupon de descuento?(Si/No)"
 		Leer IngresaCuponDescuento
-	Mientras Que no(Mayusculas(IngresaCuponDescuento) == "SI" o Mayusculas(IngresaCuponDescuento) == "NO")
+		IngresaCuponDescuento <- Mayusculas(IngresaCuponDescuento)
+	Mientras Que no(IngresaCuponDescuento == "SI" o IngresaCuponDescuento == "NO")
 	Si IngresaCuponDescuento == "SI" Entonces
 		Repetir
 			Escribir "Ingrese el cupon de descuento o *SALIR* si decide no ingresarlo"
 			Leer cuponDescuento
 			cuponDescuento <- Mayusculas(cuponDescuento)
-			Si cuponDescuento <> "CUPON1453" Entonces
+			Si no(cuponDescuento == "CUPON") Entonces
 				Escribir "El cupon ingresado no es válido o ya caduco"
 			FinSi
-		Mientras Que cuponDescuento <> "CUPON1453" o cuponDescuento <> "SALIR"
+		Mientras Que no(cuponDescuento == "CUPON" o cuponDescuento == "SALIR")
 	FinSi
 	
-	Si cuponDescuento == "CUPON1453" Entonces
+	Si cuponDescuento == "CUPON" Entonces
 		Escribir "Usted tendra un 5% de descuento en su proxima compra"
 		descuento <- subTotal * 0.05
 	FinSi
@@ -446,14 +456,15 @@ SubProceso realizarPedido(arrayAlimentos, arrayPrecios, n, cantidadPedidos Por R
 	Escribir "Total: ", total
 	
 	Repetir
-		Escribir "Realizar pedido?(Si/No)"
+		Escribir "Confirmar pedido?(Si/No)"
 		Leer confirmacionPedido
-	Mientras Que no(Mayusculas(confirmacionPedido) == "SI" o Mayusculas(confirmacionPedido) == "NO")
+		confirmacionPedido <- Mayusculas(confirmacionPedido)
+	Mientras Que no(confirmacionPedido == "SI" o confirmacionPedido == "NO")
 	
 	Si confirmacionPedido == "SI" Entonces
 		pedidosRealizados[cantidadPedidos, 0] <- nombre
 		pedidosRealizados[cantidadPedidos, 1] <- direccion
-		pedidosRealizados[cantidadPedidos, 2] <- total
+		pedidosRealizados[cantidadPedidos, 2] <- ConvertirATexto(total)
 		cantidadPedidos <- cantidadPedidos + 1
 	FinSi
 FinSubProceso
@@ -461,7 +472,7 @@ FinSubProceso
 SubProceso mostrarListaPedidos(lista, n)
 	Escribir "Nombre            Direccion             Total"
 	Para i<-0 Hasta n-1 Hacer
-		Escribir lista[i,0], "        ",lista[i,1], "        ",lista[i,2]
+		Escribir lista[i,0], "            ",lista[i,1], "              ",lista[i,2]
 	Fin Para
 FinSubProceso
 	
