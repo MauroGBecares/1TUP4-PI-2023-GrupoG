@@ -1,17 +1,24 @@
 Algoritmo TUP4_PI_2023_GRUPO_G 
-	Definir cantidadProducto, categoria, opcionOrdernar Como Entero
-	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria, busquedaProducto, opcionMenu como Caracter
+	Definir cantidadProducto, categoria, opcionOrdernar, cantidadPedidos Como Entero
+	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria, busquedaProducto, opcionMenu, clientePedidos como Caracter
 	Definir preciosRestaurant, preciosHeladeria, preciosCafeteria Como Real
 	Definir primeraCargar, existeProducto Como Logico
+	Dimension clientePedidos[100,3]
+	// LAS COLUMNAS DEL NUEVO ARREGLO SON // NOMBRE Y APELLIDO // DIRECCION // MONTO CON EL QUE PAGA EL CLIENTE
 	cantidadProducto <- 0
 	primeraCargar <- Falso
+	
+	cantidadPedidos <- 0
 	
 	Escribir "Bienvenido al APP"
 	Repetir
 		opcionMenu <- menu()
 		Limpiar Pantalla
 		Si opcionMenu <> "SALIR" 
-			categoria <- categoriaMenu()
+			Si no(opcionMenu == "REGISTRAR NUEVO PEDIDO" o opcionMenu == "LISTADO/S PEDIDO REALIZADOS") Entonces
+				categoria <- categoriaMenu()
+			FinSi
+			
 			Segun opcionMenu Hacer
 				"CARGA DE DATOS":
 					Repetir
@@ -84,12 +91,60 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 							//							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 							DatosProduto(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 					Fin Segun
+				"REGISTRAR NUEVO PEDIDO":
+					cargarPedido(clientePedidos,cantidadPedidos,3)
+					cantidadPedidos <- cantidadPedidos + 1
+				"LISTADO/S PEDIDO REALIZADOS":
+					listarPedidos(clientePedidos,cantidadPedidos,3)
 			Fin Segun
 		FinSi
 	Hasta Que opcionMenu == "SALIR"
 	Escribir "Muchas gracias por utilizar nuestra app"
-	
 FinAlgoritmo
+
+// CARGAR UN PEDIDO---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SubProceso cargarPedido(cliente,n,m)
+	Definir nombreApellido, direccion Como Caracter
+	Definir deliveryCosto, montoPagar, resultado Como Real
+	resultado <- 0
+	
+	Escribir "Ingrese el nombre y apellido del cliente: "
+	Leer nombreApellido
+	cliente[n,0] <- nombreApellido
+	
+	Escribir "Direccion del cliente: "
+	Leer direccion
+	cliente[n,1] <- direccion
+
+	Repetir
+		Escribir "Costo del delivery para el cliente: "
+		Leer deliveryCosto
+	Mientras Que deliveryCosto < 1 
+	
+	Repetir
+		Escribir "Ingresar el monto a pagar del cliente: "
+		Leer montoPagar
+	Mientras Que montoPagar < 1 
+	
+	resultado <- montoPagar + deliveryCosto
+	
+	cliente[n,2] <- ConvertirATexto(resultado)
+FinSubProceso
+
+// LISTAR TODO LOS PEDIDOS--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SubProceso listarPedidos(cliente,n,m)
+	Definir resultadoVentas Como Real
+	resultadoVentas <- 0
+	Para i<-0 Hasta n - 1 Hacer
+		Para j<-0 Hasta m - 1  Hacer
+			Escribir cliente[i,j]
+			resultadoVentas <- resultadoVentas + ConvertirANumero(cliente[i,2])
+		Fin Para
+	Fin Para
+	Escribir "EL TOTAL RECAUDADO ES: ", resultadoVentas
+FinSubProceso
+
 
 Funcion return<-menu()
 	Definir opMenu Como Cadena;
@@ -99,15 +154,17 @@ Funcion return<-menu()
 		Escribir "2. Busqueda"
 		Escribir "3. Ordenamiento"
 		Escribir "4. Listado/s"
-		Escribir "5. SALIR"
+		Escribir "5. Registrar nuevo pedido"
+		Escribir "6. Listado/s pedido realizados"
+		Escribir "7. SALIR"
 		Leer opMenu
 		opMenu <- Mayusculas(opMenu)
 		Limpiar Pantalla
-		Si no(opMenu == "CARGA DE DATOS" o opMenu == "BUSQUEDA" o opMenu == "ORDENAMIENTO" o opMenu == "LISTADO/S" o opMenu == "SALIR") Entonces
+		Si no(opMenu == "CARGA DE DATOS" o opMenu == "BUSQUEDA" o opMenu == "ORDENAMIENTO" o opMenu == "LISTADO/S" o opMenu == "SALIR" o opMenu == "REGISTRAR NUEVO PEDIDO" o opMenu == "LISTADO/S PEDIDO REALIZADOS") Entonces
 			Escribir "Debe escribir el nombre de la opcion, ingrese el texto manualmente"
 			Escribir "------------------------------------------------------------------"
 		FinSi
-	Hasta Que opMenu == "CARGA DE DATOS" o opMenu == "BUSQUEDA" o opMenu == "ORDENAMIENTO" o opMenu == "LISTADO/S" o opMenu == "SALIR"
+	Hasta Que opMenu == "CARGA DE DATOS" o opMenu == "BUSQUEDA" o opMenu == "ORDENAMIENTO" o opMenu == "LISTADO/S" o opMenu == "SALIR" o opMenu == "REGISTRAR NUEVO PEDIDO" o opMenu == "LISTADO/S PEDIDO REALIZADOS"
 	return <- opMenu
 FinFuncion
 
