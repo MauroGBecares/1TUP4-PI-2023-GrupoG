@@ -31,12 +31,12 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 						2:
 							Dimension alimentosHeladeria[cantidadProducto]
 							Dimension preciosHeladeria[cantidadProducto]
-//							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+							//							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
 							DatosProduto(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
 						3:
 							Dimension alimentosCafeteria[cantidadProducto]
 							Dimension preciosCafeteria[cantidadProducto]
-//							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+							//							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 							DatosProduto(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 					Fin Segun
 					
@@ -90,20 +90,6 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 	Escribir "Muchas gracias por utilizar nuestra app"
 	
 FinAlgoritmo
-
-Funcion return<-menu()
-	Definir optionMenu Como Cadena;
-	Repetir
-		Escribir "Ingrese el nombre de la opcion seleccionada"
-		Escribir "1. Carga de datos"
-		Escribir "2. Busqueda"
-		Escribir "3. Ordenamiento"
-		Escribir "4. Listado/s"
-		Escribir "5. SALIR"
-		Leer opMenu
-	Hasta Que opMenu == "CARGA DE DATOS" 
-	return <- opMenu
-FinFuncion
 
 Funcion return<-menu()
 	Definir opMenu Como Cadena;
@@ -373,5 +359,3 @@ SubProceso ordenarArrayBusquedaBinaria(precio, alimentos, n)
 		Fin Para
 	Fin Para
 FinSubProceso
-
-
