@@ -1,6 +1,6 @@
 Algoritmo TUP4_PI_2023_GRUPO_G 
 	Definir cantidadProducto, categoria, opcionOrdernar Como Entero
-	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria, busquedaProducto, opcionMenu Como Caracter
+	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria, busquedaProducto, opcionMenu como Caracter
 	Definir preciosRestaurant, preciosHeladeria, preciosCafeteria Como Real
 	Definir primeraCargar, existeProducto Como Logico
 	cantidadProducto <- 0
@@ -26,25 +26,31 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 						1:
 							Dimension alimentosRestaurant[cantidadProducto]
 							Dimension preciosRestaurant[cantidadProducto]
-							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+							//DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
 						2:
 							Dimension alimentosHeladeria[cantidadProducto]
 							Dimension preciosHeladeria[cantidadProducto]
-							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+//							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
 						3:
 							Dimension alimentosCafeteria[cantidadProducto]
 							Dimension preciosCafeteria[cantidadProducto]
-							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+//							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 					Fin Segun
 					
 				"BUSQUEDA":
 					Segun categoria Hacer
 						1:
-							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+							//							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
 						2:
-							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+							//							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
 						3:
-							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+							//							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 					Fin Segun
 					
 				"ORDENAMIENTO":
@@ -69,11 +75,14 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 				"LISTADO/S":
 					Segun categoria Hacer
 						1:
-							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+							//							DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
 						2:
-							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+							//							DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
 						3:
-							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+							//							DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+							DatosProduto(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
 					Fin Segun
 			Fin Segun
 		FinSi
@@ -81,6 +90,20 @@ Algoritmo TUP4_PI_2023_GRUPO_G
 	Escribir "Muchas gracias por utilizar nuestra app"
 	
 FinAlgoritmo
+
+Funcion return<-menu()
+	Definir optionMenu Como Cadena;
+	Repetir
+		Escribir "Ingrese el nombre de la opcion seleccionada"
+		Escribir "1. Carga de datos"
+		Escribir "2. Busqueda"
+		Escribir "3. Ordenamiento"
+		Escribir "4. Listado/s"
+		Escribir "5. SALIR"
+		Leer opMenu
+	Hasta Que opMenu == "CARGA DE DATOS" 
+	return <- opMenu
+FinFuncion
 
 Funcion return<-menu()
 	Definir opMenu Como Cadena;
@@ -122,64 +145,81 @@ Funcion return <- categoriaMenu()
 FinFuncion
 
 
-// DATOS RESTAURANT //
-
-SubProceso DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+SubProceso DatosProduto(cantidadProducto, alimentos, precios, opcionMenu)
 	Segun opcionMenu Hacer
 		"CARGA DE DATOS":
 			Para i <- 0 Hasta cantidadProducto -1 Hacer
 				Escribir "Ingrese el nombre del producto ", i + 1
-				Leer alimentosRestaurant[i]
-				alimentosRestaurant[i] <- Mayusculas(alimentosRestaurant[i])
+				Leer alimentos[i]
+				alimentos[i] <- Mayusculas(alimentos[i])
 				Escribir "Ingrese el precio ", i + 1 
-				Leer preciosRestaurant[i]
+				Leer precios[i]
 			Fin Para
 		"BUSQUEDA":
-			busquedaAlimento(alimentosRestaurant,preciosRestaurant,cantidadProducto)
+			busquedaAlimento(alimentos,precios,cantidadProducto)
 		"LISTADO/S":
-			mostrarLista(preciosRestaurant, alimentosRestaurant, cantidadProducto)
+			mostrarLista(precios, alimentos, cantidadProducto)
 	Fin Segun
 FinSubProceso
+
+// DATOS RESTAURANT //
+//
+//SubProceso DatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
+//	Segun opcionMenu Hacer
+//		"CARGA DE DATOS":
+//			Para i <- 0 Hasta cantidadProducto -1 Hacer
+//				Escribir "Ingrese el nombre del producto ", i + 1
+//				Leer alimentosRestaurant[i]
+//				alimentosRestaurant[i] <- Mayusculas(alimentosRestaurant[i])
+//				Escribir "Ingrese el precio ", i + 1 
+//				Leer preciosRestaurant[i]
+//			Fin Para
+//		"BUSQUEDA":
+//			busquedaAlimento(alimentosRestaurant,preciosRestaurant,cantidadProducto)
+//		"LISTADO/S":
+//			mostrarLista(preciosRestaurant, alimentosRestaurant, cantidadProducto)
+//	Fin Segun
+//FinSubProceso
 
 
 // DATOS HELADERIA  //
 
-SubProceso DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
-	Segun opcionMenu Hacer
-		"CARGA DE DATOS":
-			Para i <- 0 Hasta cantidadProducto -1 Hacer
-				Escribir "Ingrese el nombre del producto ", i + 1
-				Leer alimentosHeladeria[i]
-				alimentosHeladeria[i] <- Mayusculas(alimentosHeladeria[i])
-				Escribir "Ingrese el precio ", i + 1 
-				Leer preciosHeladeria[i]
-			Fin Para
-		"BUSQUEDA":
-			busquedaAlimento(alimentosHeladeria,preciosHeladeria,cantidadProducto)
-		"LISTADO/S":
-			mostrarLista(preciosHeladeria, alimentosHeladeria, cantidadProducto)
-	Fin Segun
-FinSubProceso
+//SubProceso DatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria, opcionMenu)
+//	Segun opcionMenu Hacer
+//		"CARGA DE DATOS":
+//			Para i <- 0 Hasta cantidadProducto -1 Hacer
+//				Escribir "Ingrese el nombre del producto ", i + 1
+//				Leer alimentosHeladeria[i]
+//				alimentosHeladeria[i] <- Mayusculas(alimentosHeladeria[i])
+//				Escribir "Ingrese el precio ", i + 1 
+//				Leer preciosHeladeria[i]
+//			Fin Para
+//		"BUSQUEDA":
+//			busquedaAlimento(alimentosHeladeria,preciosHeladeria,cantidadProducto)
+//		"LISTADO/S":
+//			mostrarLista(preciosHeladeria, alimentosHeladeria, cantidadProducto)
+//	Fin Segun
+//FinSubProceso
 
 
 // DATOS CAFETERIA  //
 
-SubProceso DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
-	Segun opcionMenu Hacer
-		"CARGA DE DATOS":
-			Para i <- 0 Hasta cantidadProducto -1 Hacer
-				Escribir "Ingrese el nombre del producto ", i + 1
-				Leer alimentosCafeteria[i]
-				alimentosCafeteria[i] <- Mayusculas(alimentosCafeteria[i])
-				Escribir "Ingrese el precio ", i + 1 
-				Leer preciosCafeteria[i]
-			Fin Para
-		"BUSQUEDA":
-			busquedaAlimento(alimentosCafeteria,preciosCafeteria,cantidadProducto)
-		"LISTADO/S":
-			mostrarLista(preciosCafeteria, alimentosCafeteria, cantidadProducto)
-	Fin Segun
-FinSubProceso
+//SubProceso DatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria, opcionMenu)
+//	Segun opcionMenu Hacer
+//		"CARGA DE DATOS":
+//			Para i <- 0 Hasta cantidadProducto -1 Hacer
+//				Escribir "Ingrese el nombre del producto ", i + 1
+//				Leer alimentosCafeteria[i]
+//				alimentosCafeteria[i] <- Mayusculas(alimentosCafeteria[i])
+//				Escribir "Ingrese el precio ", i + 1 
+//				Leer preciosCafeteria[i]
+//			Fin Para
+//		"BUSQUEDA":
+//			busquedaAlimento(alimentosCafeteria,preciosCafeteria,cantidadProducto)
+//		"LISTADO/S":
+//			mostrarLista(preciosCafeteria, alimentosCafeteria, cantidadProducto)
+//	Fin Segun
+//FinSubProceso
 
 
 // MENU DE ORDENAMIENTOS //
@@ -280,24 +320,6 @@ SubProceso mostrarLista(arrayPrecio, arrayAlimento, n)
 	Fin Para
 FinSubProceso
 
-
-SubProceso ordenarArrayBusquedaBinaria(precio, alimentos, n)
-	Definir aux Como Caracter
-	Definir aux2 Como Real
-	Para i <- 0 Hasta n - 2 Hacer
-		Para j <- i + 1 Hasta n - 1 Hacer
-			Si alimentos[i] > alimentos[j] Entonces
-				aux <- alimentos[i]; 
-				aux2 <- precio[i]
-				alimentos[i] <- alimentos[j]; 
-				precio[i] <- precio[j]
-				alimentos[j] <- aux; 
-				precio[j] <- aux2
-			Fin Si
-		Fin Para
-	Fin Para
-FinSubProceso
-
 // BUSQUEDA //
 
 SubProceso busquedaAlimento(alimentos, precios, cantidadProducto)
@@ -333,4 +355,23 @@ SubProceso busquedaAlimento(alimentos, precios, cantidadProducto)
 		Escribir "No se encontro el alimento solicitado";
 	FinSi
 FinSubProceso
+
+
+SubProceso ordenarArrayBusquedaBinaria(precio, alimentos, n)
+	Definir aux Como Caracter
+	Definir aux2 Como Real
+	Para i <- 0 Hasta n - 2 Hacer
+		Para j <- i + 1 Hasta n - 1 Hacer
+			Si alimentos[i] > alimentos[j] Entonces
+				aux <- alimentos[i]; 
+				aux2 <- precio[i]
+				alimentos[i] <- alimentos[j]; 
+				precio[i] <- precio[j]
+				alimentos[j] <- aux; 
+				precio[j] <- aux2
+			Fin Si
+		Fin Para
+	Fin Para
+FinSubProceso
+
 
