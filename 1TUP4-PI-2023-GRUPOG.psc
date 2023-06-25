@@ -1,151 +1,276 @@
-Algoritmo TUP4_PI_2023_GRUPO_G 
-	Definir cantidadProducto, categoria, opcionMenu, opcionOrdernar Como Entero
-	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria  Como Caracter
+Algoritmo TUP4_PI_2023_GRUPO_G
+	Definir cantidadProducto, cantidadPedidos Como Entero
+	Definir alimentosRestaurant, alimentosHeladeria, alimentosCafeteria, busquedaProducto, opcionMenuComerciante, pedidosRealizados, usuario, contrasenia, opcionOrdernar como Caracter
+	Definir opcionMenuCliente, categoria Como Caracter
 	Definir preciosRestaurant, preciosHeladeria, preciosCafeteria Como Real
-	Definir primeraCargar Como Logico
+	Definir existeProducto, finalizarPrograma, primeraCargaRestaurant, primeraCargaHeladeria, primeraCargaCafeteria Como Logico
+	Dimension pedidosRealizados[100,3]
+	// LAS COLUMNAS DEL NUEVO ARREGLO SON // NOMBRE Y APELLIDO // DIRECCION // MONTO CON EL QUE PAGA EL CLIENTE
+	finalizarPrograma <- Falso
 	cantidadProducto <- 0
-	primeraCargar <- Falso
+	primeraCargaRestaurant <- Falso
+	primeraCargaHeladeria <- Falso
+	primeraCargaCafeteria <- Falso
+	
+	cantidadPedidos <- 0
 	
 	Escribir "Bienvenido al APP"
+	
 	Repetir
-		opcionMenu <- menu()
-		categoria <- categoriaMenu()
-		Segun opcionMenu Hacer
-			1:
-				Repetir
-					Escribir "Ingrese la cantidad productos"
-					Leer cantidadProducto
-					Si cantidadProducto < 1 Entonces
-						Escribir "La cantidad no puede ser menor a uno"
-					Fin Si
-				Mientras que cantidadProducto < 1
-				
-				Segun categoria Hacer
-					1:
-						Dimension alimentosRestaurant[cantidadProducto]
-						Dimension preciosRestaurant[cantidadProducto]
-						cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
-					2:
-						Dimension alimentosHeladeria[cantidadProducto]
-						Dimension preciosHeladeria[cantidadProducto]
-						cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-					3:
-						Dimension alimentosCafeteria[cantidadProducto]
-						Dimension preciosCafeteria[cantidadProducto]
-						cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-				Fin Segun				
-			2:
-				
-			3:
-				Repetir
-					Escribir "¿Como desea ordenar?"
-					Escribir "1- Precio?"
-					Escribir "2- Alfabeticamente"
-					Leer  opcionOrdernar
-					Si opcionOrdernar < 1 o opcionOrdernar > 2 Entonces
-						Escribir "La opcion ingresada no es valida"
+		menuPrincipal(usuario, contrasenia, finalizarPrograma)
+		Si usuario == "cliente123" y contrasenia == "87987" Entonces
+			Repetir
+				opcionMenuCliente <- menuCliente()
+				Si opcionMenuCliente <> "SALIR" Entonces
+					Si opcionMenuCliente == "REALIZAR PEDIDO" Entonces
+						categoria <- categoriaMenu()
+						Segun categoria Hacer
+							"RESTAURANT":
+								Si primeraCargaRestaurant Entonces
+									mostrarLista(alimentosRestaurant, preciosRestaurant, cantidadProducto)
+									realizarPedido(alimentosRestaurant, preciosRestaurant, cantidadProducto)
+								Sino 
+									Escribir "No hay datos productos cargados"
+								FinSi
+							"HELADERIA":
+								Si primeraCargaHeladeria Entonces
+									mostrarLista(alimentosHeladeria, preciosHeladeria, cantidadProducto)
+									realizarPedido(alimentosHeladeria, preciosHeladeria, cantidadProducto)
+								SiNo
+									Escribir "No hay datos productos cargados"
+								FinSi
+							"CAFETERIA":
+								Si primeraCargaCafeteria Entonces
+									mostrarLista(alimentosCafeteria, preciosCafeteria, cantidadProducto)
+									realizarPedido(alimentosCafeteria, preciosCafeteria, cantidadProducto)
+								SiNo
+									Escribir "No hay datos productos cargados"
+								FinSi
+						Fin Segun
+					SiNo
+						mostrarListaPedidos(pedidosRealizados, cantidadPedidos)
 					FinSi
-				Mientras Que  opcionOrdernar < 1 o opcionOrdernar > 2
-				Segun categoria Hacer
-					1:
-						ordenamiento(preciosRestaurant, alimentosRestaurant, cantidadProducto, opcionOrdernar)
-					2:
-						ordenamiento(preciosHeladeria, alimentosHeladeria, cantidadProducto, opcionOrdernar)
-					3: 
-						ordenamiento(preciosCafeteria, alimentosCafeteria, cantidadProducto, opcionOrdernar)
-				FinSegun
-				Escribir "Ordenamiento realizado con exito!"
-			4:			
-				Segun categoria Hacer
-					1:
-						cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
-					2:
-						listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-					3:
-						listarDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-				Fin Segun
-		Fin Segun
-		
-	Hasta Que opMenu==5
+				FinSi
+			Mientras Que opcionMenuCliente <> "SALIR"
+		SiNo
+			Si usuario == "comerciante546" y contrasenia == "64541" Entonces
+				Repetir
+					opcionMenuComerciante <- menuComerciante()
+					Si opcionMenuComerciante <> "SALIR" Entonces
+						categoria <- categoriaMenu()
+						Segun opcionMenuComerciante Hacer
+							"CARGA DE DATOS":
+								cantidadProducto <- cargarCantidadProductos()
+								Segun categoria Hacer
+									"RESTAURANT":
+										Dimension alimentosRestaurant[cantidadProducto]
+										Dimension preciosRestaurant[cantidadProducto]
+										cargarProducto(alimentosRestaurant, preciosRestaurant, cantidadProducto)
+										primeraCargaRestaurant <- Verdadero
+									"HELADERIA":
+										Dimension alimentosHeladeria[cantidadProducto]
+										Dimension preciosHeladeria[cantidadProducto]
+										cargarProducto(alimentosHeladeria, preciosHeladeria, cantidadProducto)
+										primeraCargaHeladeria <- Verdadero
+									"CAFETERIA":
+										Dimension alimentosCafeteria[cantidadProducto]
+										Dimension preciosCafeteria[cantidadProducto]
+										cargarProducto(alimentosCafeteria, preciosCafeteria, preciosCafeteria)
+										primeraCargaCafeteria <- Verdadero
+								Fin Segun
+							"BUSQUEDA":
+								Segun categoria Hacer
+									"RESTAURANT":
+										busquedaProductoComerciante(alimentosRestaurant, preciosRestaurant, cantidadProducto)
+									"HELADERIA":
+										busquedaProductoComerciante(alimentosHeladeria, preciosRestaurant, cantidadProducto)
+									"CAFETERIA":
+										busquedaProductoComerciante(alimentosCafeteria, preciosCafeteria, cantidadProducto)
+								Fin Segun
+							"ORDENAMIENTO":
+								opcionOrdernar <- menuOrdenamiento()
+								Segun categoria Hacer
+									"RESTAURANT":
+										ordenamiento(preciosRestaurant, alimentosRestaurant, cantidadProducto, opcionOrdernar)
+									"HELADERIA":
+										ordenamiento(preciosHeladeria, alimentosHeladeria, cantidadProducto, opcionOrdernar)
+									"CAFETERIA":
+										ordenamiento(preciosCafeteria, alimentosCafeteria, cantidadProducto, opcionOrdernar)
+								Fin Segun
+							"LISTADO":
+								Segun categoria Hacer
+									"RESTAURANT":
+										mostrarLista(alimentosRestaurant, preciosRestaurant, cantidadProducto)
+									"HELADERIA":
+										mostrarLista(alimentosHeladeria, preciosHeladeria, cantidadProducto)
+									"CAFETERIA":
+										mostrarLista(alimentosCafeteria, preciosCafeteria, cantidadProducto)
+								Fin Segun
+						Fin Segun
+					FinSi
+				Mientras Que opcionMenuComerciante <> "SALIR"
+			FinSi
+		FinSi
+	Mientras Que no(finalizarPrograma)
 	Escribir "Muchas gracias por utilizar nuestra app"
 FinAlgoritmo
-
-Funcion return<-menu()
-	Definir opMenu Como Entero;
+ // -----------------------------------------------------------MENU PRINCIPAL----------------------------------------------------------------------------------------------------- //
+SubProceso menuPrincipal(usuario Por Referencia, contrasenia Por Referencia, salida Por Referencia)
+	Definir opcionIngreso Como Caracter
 	Repetir
-		Escribir "1. Carga de datos"
-		Escribir "2. Búsqueda"
-		Escribir "3. Ordenamiento"
-		Escribir "4. Listado/s"
-		Escribir "5. SALIR";
-		Leer opMenu;
-	Mientras Que opMenu < 1 o opMenu > 5
-	return <- opMenu;
+		Escribir "Que desea hacer?"
+		Escribir "- Ingresar"
+		Escribir "- Salir"
+		Leer opcionIngreso
+	Mientras Que no(Mayusculas(opcionIngreso) == "INGRESAR" o Mayusculas(opcionIngreso) == "SALIR")
+	Si Mayusculas(opcionIngreso) == "INGRESAR" Entonces
+		Repetir
+			Escribir "Ingrese su nombre de usuario: "
+			Leer usuario
+			Escribir "Ingrese su contraseña: "
+			Leer contrasenia
+			Si no((usuario == "cliente123" y contrasenia == "87987") o (usuario == "comerciante546" y contrasenia == "64541"))
+				Escribir "Las credeciales ingresadas son incorrectas, intente nuevamente"
+			FinSi
+		Mientras Que no((usuario == "cliente123" y contrasenia == "87987") o (usuario == "comerciante546" y contrasenia == "64541"))
+	SiNo
+		salida <- Verdadero
+	FinSi
+	Limpiar Pantalla
+FinSubProceso
+// -----------------------------------------------------------FIN MENU PRINCIPAL----------------------------------------------------------------------------------------------------- //
+
+ // ------------------------------------------------------------------COMERCIANTE---------------------------------------------------------------------------------------------------- //
+// MENU PRINCIPAL DEL COMERCIANTE //
+Funcion return <- menuComerciante()
+	Definir opMenu Como Cadena
+	Repetir
+		Escribir "Ingrese una opcion"
+		Escribir "- Carga de datos"
+		Escribir "- Busqueda"
+		Escribir "- Ordenamiento"
+		Escribir "- Listado"
+		Escribir "- SALIR"
+		Leer opMenu
+		opMenu <- Mayusculas(opMenu)
+		Si no(opMenu == "CARGA DE DATOS" o opMenu == "BUSQUEDA" o opMenu == "ORDENAMIENTO" o opMenu == "LISTADO" o opMenu == "SALIR") Entonces
+			Escribir "La opcion ingresada es incorrecta, ingrese otra nuevamente"
+		FinSi
+	Hasta Que opMenu == "CARGA DE DATOS" o opMenu == "BUSQUEDA" o opMenu == "ORDENAMIENTO" o opMenu == "LISTADO" o opMenu == "SALIR"
+	return <- opMenu
+	Limpiar Pantalla
 FinFuncion
 
+// MENU DE CATEGORIAS //
 Funcion return <- categoriaMenu()
-	Definir opCategoria Como Entero
+	Definir opCategoria Como Cadena
 	Repetir
-		Escribir "Ingrese categoria"
-		Escribir "1. Restaurant"
-		Escribir "2. Heladeria"
-		Escribir "3. Cafeteria"
+		Escribir "Ingrese la categoria"
+		Escribir "- Restaurant"
+		Escribir "- Heladeria"
+		Escribir "- Cafeteria"
 		Leer opCategoria
-	Mientras Que opCategoria < 1 o opCategoria > 3
+		opCategoria <- Mayusculas(opCategoria)
+		Si no(opCategoria == "RESTAURANT" o opCategoria == "HELADERIA" o opCategoria == "CAFETERIA") Entonces
+			Escribir "La categoria ingresada es incorrecta, ingrese otra nuevamente"
+		FinSi
+	Mientras Que no(opCategoria == "RESTAURANT" o opCategoria == "HELADERIA" o opCategoria == "CAFETERIA")
 	return <- opCategoria
+	Limpiar Pantalla
 FinFuncion
 
-SubProceso  cargaDatosRestaurant(cantidadProducto, alimentosRestaurant, preciosRestaurant, opcionMenu)
-	Segun opcionMenu Hacer
-		1:
-			Para i <- 0 Hasta cantidadProducto -1 Hacer
-				Escribir "Ingrese el nombre del producto ", i + 1
-				Leer alimentosRestaurant[i]
-				Escribir "Ingrese el precio ", i + 1 
-				Leer preciosRestaurant[i]
-			Fin Para
-		3:
-			
-		4:
-			Para i <- 0 Hasta cantidadProducto -1 Hacer
-				Escribir "Producto", i + 1, alimentosRestaurant[i]
-				Escribir "Ingrese el precio ", i + 1, preciosRestaurant[i]
-			Fin Para
-	Fin Segun
-FinSubProceso
+// COMO COMERCIANTE ELIJE LA CANTIDAD DE PRODUCTOS QUE QUIERE CARGAR //
+Funcion return <- cargarCantidadProductos()
+	Definir cantProductos Como Entero
+	Repetir
+		Escribir "Ingrese la cantidad de productos"
+		Leer cantProductos
+	Mientras Que cantProductos < 0
+	return <- cantProductos
+FinFuncion
 
-SubProceso  cargaDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
+// CARGAR PRODUCTO //
+SubProceso cargarProducto(arrayNombreAlimentos, arrayPrecio, n)
+	Para i <- 0 Hasta n-1 Hacer
 		Escribir "Ingrese el nombre del producto ", i + 1
-		Leer alimentosHeladeria[i]
+		Leer arrayNombreAlimentos[i]
+		arrayNombreAlimentos[i] <- Mayusculas(arrayNombreAlimentos[i])
 		Escribir "Ingrese el precio ", i + 1 
-		Leer preciosHeladeria[i]
+		Leer arrayPrecio[i]
 	Fin Para
 FinSubProceso
 
-SubProceso  cargaDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Ingrese el nombre del producto ", i + 1
-		Leer alimentosCafeteria[i]
-		Escribir "Ingrese el precio ", i + 1 
-		Leer preciosCafeteria[i]
-	Fin Para
+// BUSQUEDA DE PRODUCTO //
+SubProceso busquedaProductoComerciante(arrayAlimentos, arrayPrecios, cantidadProductos)
+	Definir  alimentoBuscado Como Cadena
+	Definir indice Como Entero
+	Escribir "Ingrese el alimento que quiere buscar"
+	Leer alimentoBuscado
+	alimentoBuscado <- Mayusculas(alimentoBuscado)
+	indice <- buscarProducto(arrayAlimentos, arrayPrecios, cantidadProductos, alimentoBuscado)
+	Si indice < 0 Entonces
+		Escribir "No se encontro el alimento solicitado";
+	SiNo
+		Escribir arrayAlimentos[indice], " ", arrayPrecios[indice], "."
+	FinSi
 FinSubProceso
 
-SubProceso  listarDatosHeladeria(cantidadProducto, alimentosHeladeria, preciosHeladeria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Producto", i + 1, alimentosHeladeria[i]
-		Escribir "Ingrese el precio ", i + 1, preciosHeladeria[i]
-	Fin Para
+// BUSCAR PRODUCTO //
+Funcion return <- buscarProducto(arrayAlimentos, arrayPrecios, cantidadProductos, elementoABuscar)
+	Definir indiceInferior, indiceSuperior, centro Como Entero
+	Definir elementoEncontrado Como Logico
+	elementoEncontrado <- Falso
+	
+	ordenarArrayAlimentos(arrayPrecios, arrayAlimentos, cantidadProductos)
+	
+	indiceInferior<-0
+	indiceSuperior<-cantidadProductos-1
+	
+	Mientras indiceInferior <= indiceSuperior y no elementoEncontrado
+		centro <- trunc((indiceInferior+indiceSuperior)/2)
+		si arrayAlimentos[centro] == elementoABuscar Entonces
+			elementoEncontrado <- Verdadero
+		SiNo 
+			Si arrayAlimentos[centro] > elementoABuscar Entonces
+				indiceSuperior <- centro - 1
+			SiNo
+				indiceInferior <- centro + 1
+			FinSi
+		FinSi
+	FinMientras
+	
+	Si no elementoEncontrado Entonces
+		return <- -1
+	SiNo
+		return <- centro
+	FinSi
 FinSubProceso
 
-SubProceso  listarDatosCafeteria(cantidadProducto, alimentosCafeteria, preciosCafeteria)
-	Para i <- 0 Hasta cantidadProducto -1 Hacer
-		Escribir "Producto", i + 1, alimentosCafeteria[i]
-		Escribir "Ingrese el precio ", i + 1, preciosCafeteria[i]
-	Fin Para
+// MENU ORDENAMIENTO PRINCIPAL //
+Funcion return <- menuOrdenamiento()
+	Repetir
+		Escribir "¿Como desea ordenar?"
+		Escribir "- Precio"
+		Escribir "- Alfabeticamente"
+		Leer opcionOrdernar
+		Si no(opcionOrdernar == "PRECIO" o opcionOrdernar == "ALFABETICAMENTE") Entonces
+			Escribir "La opcion ingresada no es valida"
+		FinSi
+	Mientras Que no(opcionOrdernar == "PRECIO" o opcionOrdernar == "ALFABETICAMENTE")
+	return <- opcionOrdernar
+FinFuncion
+
+// ORDENAMIENTO //
+
+SubProceso ordenamiento(precio, alimentos, n, opcionOrdernar)
+	Si opcionOrdernar == "PRECIO" Entonces
+		ordenarArrayPrecios(precio,alimentos,n)
+	SiNo
+		ordenarArrayAlimentos(precio, alimentos, n)
+	FinSi
 FinSubProceso
 
+ // MENU DE ORDENAMIENTO PARA PRECIOS //
 SubProceso ordenarArrayPrecios(precio,alimentos,n)
     Definir orderBy Como Caracter;
     Repetir
@@ -160,6 +285,8 @@ SubProceso ordenarArrayPrecios(precio,alimentos,n)
         ordernarArregloPrecioDESC(precio,alimentos,n)
     FinSi
 FinSubProceso
+
+// ORDENA DE MENOR A MAYOR PRECIOS //
 
 SubProceso ordernarArregloPrecioASC(precio,alimentos,n)
     Definir aux Como Entero;
@@ -178,6 +305,8 @@ SubProceso ordernarArregloPrecioASC(precio,alimentos,n)
     FinPara
 FinSubProceso
 
+// ORDENA DE MAYOR A MENOR PRECIOS //
+
 SubProceso ordernarArregloPrecioDESC(precio,alimentos,n)
     Definir aux Como Entero;
 	Definir aux2 Como Caracter
@@ -194,6 +323,8 @@ SubProceso ordernarArregloPrecioDESC(precio,alimentos,n)
         FinPara
     FinPara
 FinSubProceso
+
+// ORDENAR ALFABETICAMENTE A-Z  //
 
 SubProceso ordenarArrayAlimentos(precio, alimentos, n)
 	Definir aux Como Caracter
@@ -212,13 +343,125 @@ SubProceso ordenarArrayAlimentos(precio, alimentos, n)
 	Fin Para
 FinSubProceso
 
-SubProceso ordenamiento(precio, alimentos, n, opcionOrdernar)
-	Si opcionOrdernar = 1 Entonces
-		ordenarArrayPrecios(precio,alimentos,n)
-	SiNo
-		ordenarArrayAlimentos(precio, alimentos, n)
+// MOSTRAR LISTA //
+SubProceso mostrarLista(arrayAlimentos, arrayPrecios, n)
+	Escribir "PRODUCTO     PRECIO"
+	Para i <- 0 Hasta n -1 Hacer
+		Escribir arrayAlimentos[i]," - ", arrayPrecios[i]
+	Fin Para
+FinSubProceso
+
+// ------------------------------------------------------------------FIN COMERCIANTE--------------------------------------------------------------------------------------------------- //
+
+// ------------------------------------------------------------------CLIENTE----------------------------------------------------------------------------------------------------------- //
+Funcion return <- menuCliente()
+	Definir opMenu Como Cadena;
+	Repetir
+		Escribir "Ingrese una opcion"
+		Escribir "- Realizar pedido"
+		Escribir "- Ver pedidos realizados"
+		Escribir "- SALIR"
+		Leer opMenu
+		opMenu <- Mayusculas(opMenu)
+		Si no(opMenu == "REALIZAR PEDIDO" o opMenu == "VER PEDIDOS REALIZADOS" o opMenu == "SALIR") Entonces
+			Escribir "La opcion ingresada es incorrecta, ingrese otra nuevamente"
+		FinSi
+	Mientras Que no(opMenu == "REALIZAR PEDIDO" o opMenu == "VER PEDIDOS REALIZADOS" o opMenu == "SALIR")
+	return <- opMenu
+	Limpiar Pantalla
+FinFuncion
+
+
+SubProceso realizarPedido(arrayAlimentos, arrayPrecios, n, cantidadPedidos Por Referencia, pedidosRealizados)
+	Definir pedido, nombre, IngresaCuponDescuento, direccion, listaProductos, confirmacionPedido Como Caracter
+	Definir indice, cantidadPedido, i, cantidad, descuento Como Entero
+	Definir subTotal, total, costoEnvio, costoServicio Como Real
+	costoEnvio <- 300
+	costoServicio <- 100
+	descuento <- 0
+	Escribir "Ingrese la cantidad de productos que desea pedir: "
+	Leer cantidadPedido
+	Dimension listaProductos[cantidadPedido, 3]
+	i <- 0
+	Repetir
+		Repetir
+			Escribir "Que quiere pedir?"
+			Leer pedido
+			pedido <- Mayusculas(pedido)
+			indice <- buscarProducto(arrayAlimentos, arrayPrecios, n, pedido)
+			Si indice < 0 Entonces
+				Escribir "Lo solicitado no se encuentra en la lista"
+			FinSi
+		Mientras Que indice < 0
+		Repetir
+			Escribir "Ingrese la cantidad: "
+			Leer cantidad
+		Mientras Que cantidad < 0
+		listaProductos[i, 0] <- pedido
+		listaProductos[i, 1] <- ConvertirATexto(cantidad)
+		listaProductos[i, 2] <- ConvertirATexto(arrayPrecios[indice])
+		subTotal <- subTotal + (arrayPrecios[indice] * cantidad)
+		i <- i + 1
+	Mientras Que i < cantidadPedido
+	
+	Escribir "Ingrese su nombre: "
+	Leer nombre
+	
+	Escribir "Ingrese su dirección: "
+	Leer direccion
+	
+	Repetir
+		Escribir "Posee cupon de descuento?(Si/No)"
+		Leer IngresaCuponDescuento
+	Mientras Que no(Mayusculas(IngresaCuponDescuento) == "SI" o Mayusculas(IngresaCuponDescuento) == "NO")
+	Si IngresaCuponDescuento == "SI" Entonces
+		Repetir
+			Escribir "Ingrese el cupon de descuento o *SALIR* si decide no ingresarlo"
+			Leer cuponDescuento
+			cuponDescuento <- Mayusculas(cuponDescuento)
+			Si cuponDescuento <> "CUPON1453" Entonces
+				Escribir "El cupon ingresado no es válido o ya caduco"
+			FinSi
+		Mientras Que cuponDescuento <> "CUPON1453" o cuponDescuento <> "SALIR"
+	FinSi
+	
+	Si cuponDescuento == "CUPON1453" Entonces
+		Escribir "Usted tendra un 5% de descuento en su proxima compra"
+		descuento <- subTotal * 0.05
+	FinSi
+	
+	total <- subTotal - descuento + costoEnvio + costoServicio
+	
+	Escribir "Detalle del pedido: "
+	Escribir "Nombre: ", nombre
+	Escribir "Dirección: ", direccion
+	Escribir "Subtotal: ", subTotal
+	Escribir "Descuento: ", descuento
+	Escribir "Producto          Cantidad          Monto"
+	Para i<-0 Hasta cantidadPedido - 1 Hacer
+		Escribir listaProductos[i,0], "         ",listaProductos[i,1], "         ",listaProductos[i,2]
+	Fin Para
+	Escribir "Costo de envio: ", costoEnvio
+	Escribir "Costo de servicio: ", costoServicio
+	Escribir "Total: ", total
+	
+	Repetir
+		Escribir "Realizar pedido?(Si/No)"
+		Leer confirmacionPedido
+	Mientras Que no(Mayusculas(confirmacionPedido) == "SI" o Mayusculas(confirmacionPedido) == "NO")
+	
+	Si confirmacionPedido == "SI" Entonces
+		pedidosRealizados[cantidadPedidos, 0] <- nombre
+		pedidosRealizados[cantidadPedidos, 1] <- direccion
+		pedidosRealizados[cantidadPedidos, 2] <- total
+		cantidadPedidos <- cantidadPedidos + 1
 	FinSi
 FinSubProceso
 
-
+SubProceso mostrarListaPedidos(lista, n)
+	Escribir "Nombre            Direccion             Total"
+	Para i<-0 Hasta n-1 Hacer
+		Escribir lista[i,0], "        ",lista[i,1], "        ",lista[i,2]
+	Fin Para
+FinSubProceso
 	
